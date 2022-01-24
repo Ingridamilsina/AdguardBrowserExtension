@@ -11,7 +11,7 @@ Here is what should be done for AdGuard API to work.
 ```
     {
       "all_frames": true,
-      "js": ["adguard/adguard-content.js"],
+      "js": ["adguard-content.js"],
       "matches": [
         "http://*/*",
         "https://*/*"
@@ -21,9 +21,11 @@ Here is what should be done for AdGuard API to work.
     }
 ```
 
-#### 2. Add AdGuard's script to the background page:
+#### 2. Place adguard-assistant.js script to the directory near manifest.json
+
+#### 3. Add AdGuard's script to the background page:
 ```
-<script type="text/javascript" src="adguard/adguard-api.js"></script>
+<script type="text/javascript" src="adguard-api.js"></script>
 ```
 
 

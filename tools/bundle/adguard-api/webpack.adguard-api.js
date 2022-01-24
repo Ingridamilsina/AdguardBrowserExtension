@@ -5,9 +5,9 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import CreateFileWebpack from 'create-file-webpack';
 import ZipWebpackPlugin from 'zip-webpack-plugin';
 import path from 'path';
-import { BUILD_PATH } from '../../constants';
+import { BUILD_PATH, ENVS } from '../../constants';
 
-import { getEnvConf } from '../../helpers';
+import { getEnvConf, updateManifest } from '../../helpers';
 import { adguardApiManifest } from './manifest.adguard-api';
 import { getModuleReplacements } from '../module-replacements';
 
@@ -17,18 +17,24 @@ const BACKGROUND_PATH = path.resolve(__dirname, '../../../Extension/api/sample-e
 const POPUP_PATH = path.resolve(__dirname, '../../../Extension/api/sample-extension/entries/popup');
 const ADGUARD_ASSISTANT_PATH = path.resolve(__dirname, '../../../Extension/api/sample-extension/entries/adguard-assistant.js');
 const ADGUARD_CONTENT_PATH = path.resolve(__dirname, '../../../Extension/api/sample-extension/entries/adguard-content.js');
+const ADGUARD_API_PATH = path.resolve(__dirname, '../../../Extension/api/sample-extension/entries/adguard-api.js');
 
 export const genSampleApiConfig = (browserConfig) => {
     const OUTPUT_PATH = path.join(BUILD_PATH, config.outputPath, browserConfig.buildDir);
+    const isDev = process.env.BUILD_ENV === ENVS.DEV;
 
     return {
         mode: config.mode,
-        devtool: false,
+        devtool: isDev ? 'eval-source-map' : false,
+        optimization: {
+            minimize: false,
+        },
         entry: {
             'background': BACKGROUND_PATH,
             'popup': POPUP_PATH,
             'adguard-assistant': ADGUARD_ASSISTANT_PATH,
             'adguard-content': ADGUARD_CONTENT_PATH,
+            'adguard-api': ADGUARD_API_PATH,
         },
         output: {
             path: OUTPUT_PATH,
@@ -120,7 +126,7 @@ export const genSampleApiConfig = (browserConfig) => {
             new CreateFileWebpack({
                 path: OUTPUT_PATH,
                 fileName: 'manifest.json',
-                content: JSON.stringify(adguardApiManifest, null, 4),
+                content: JSON.stringify(updateManifest(process.env.BUILD_ENV, adguardApiManifest, {}), null, 4),
             }),
             new ZipWebpackPlugin({
                 path: '../',

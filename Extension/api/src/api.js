@@ -239,8 +239,8 @@ export const adguardApi = (function () {
      */
     const openAssistant = async (tabId) => {
         if (tabsApi.executeScriptFile) {
-            // Load Assistant code to the activate tab immediately
-            await tabsApi.executeScriptFile(null, { file: '/adguard/assistant/assistant.js' });
+            // Load Assistant code to activate tab immediately
+            await tabsApi.executeScriptFile(null, { file: '/adguard-assistant.js' });
             initAssistant(tabId);
         } else {
             // Manually start assistant
@@ -270,8 +270,9 @@ export const adguardApi = (function () {
     localeDetect.init();
 
     const handleMessage = async (message) => {
-        if (message.type === 'openAssistantInTab') {
-            await openAssistant(message.tabId);
+        const { type, data } = message;
+        if (type === 'openAssistantInTab') {
+            await openAssistant(data.tabId);
         }
         return Promise.resolve();
     };
