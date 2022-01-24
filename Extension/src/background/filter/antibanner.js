@@ -411,6 +411,7 @@ export const antiBannerService = (() => {
      * @private
      */
     async function createRequestFilter() {
+        debugger;
         if (applicationRunning === false) {
             return;
         }

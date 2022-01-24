@@ -25,16 +25,7 @@ export const adguardApiManifest = {
             ],
             'match_about_blank': true,
             'run_at': 'document_start',
-        },
-        {
-            'all_frames': false,
-            'js': ['adguard-assistant.js'],
-            'matches': [
-                'http://*/*',
-                'https://*/*',
-            ],
-            'run_at': 'document_end',
-        },
+        }
     ],
     'minimum_chrome_version': '55.0',
     'permissions': [

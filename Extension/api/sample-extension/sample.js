@@ -3,6 +3,9 @@
 /* global adguardApi */
 
 // Init the configuration
+import { webRequestService } from '../../src/background/filter/request-blocking';
+import { utils } from '../../src/background/utils/common';
+
 const configuration = {
     // Adguard English filter alone
     filters: [2],
@@ -28,7 +31,8 @@ const onBlocked = function (details) {
 adguardApi.onRequestBlocked.addListener(onBlocked);
 
 // Add event listener for rules created by Adguard Assistant
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log({ message, sender });
     if (message.type === 'assistant-create-rule') {
         const { ruleText } = message.data;
         console.log(`Rule ${ruleText} was created by Adguard Assistant`);
@@ -36,6 +40,18 @@ chrome.runtime.onMessage.addListener((message) => {
         adguardApi.configure(configuration, () => {
             console.log('Finished Adguard API re-configuration');
         });
+    } else if (message.type === 'getSelectorsAndScripts') {
+        let urlForSelectors;
+        // https://github.com/AdguardTeam/AdguardBrowserExtension/issues/1498
+        // when document url for iframe is about:blank then we use tab url
+        if (!utils.url.isHttpOrWsRequest(message.documentUrl) && sender.frameId !== 0) {
+            urlForSelectors = sender.tab.url;
+        } else {
+            urlForSelectors = message.documentUrl;
+        }
+        const response = webRequestService.processGetSelectorsAndScripts(sender.tab, urlForSelectors) || {};
+        console.log(response);
+        sendResponse(response);
     }
 });
 
@@ -55,4 +71,4 @@ setTimeout(() => {
     adguardApi.stop(() => {
         console.log('Adguard API has been disabled.');
     });
-}, 60 * 1000);
+}, 10 * 1000);
