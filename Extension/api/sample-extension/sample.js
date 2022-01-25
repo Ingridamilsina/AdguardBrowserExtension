@@ -55,4 +55,4 @@ setTimeout(() => {
     adguardApi.stop(() => {
         console.log('Adguard API has been disabled.');
     });
-}, 10 * 1000);
+}, 60 * 1000);
