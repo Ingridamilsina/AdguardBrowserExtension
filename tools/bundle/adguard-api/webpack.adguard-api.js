@@ -116,11 +116,6 @@ export const genSampleApiConfig = (browserConfig) => {
                         from: 'assets/libs/scriptlets/redirects.yml',
                         to: 'adguard',
                     },
-                    {
-                        context: 'Extension',
-                        from: 'src/content-script/subscribe.js',
-                        to: 'content-script/subscribe.js',
-                    },
                 ],
             }),
             new CreateFileWebpack({

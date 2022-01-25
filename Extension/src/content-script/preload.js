@@ -472,7 +472,6 @@ export const preload = (function () {
      * @param response Response from the background page
      */
     const processCssAndScriptsResponse = (response) => {
-        console.log(response);
         if (!response || response.requestFilterReady === false) {
             /**
              * This flag (requestFilterReady) means that we should wait for a while, because the
