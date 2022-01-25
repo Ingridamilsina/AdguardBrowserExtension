@@ -28,8 +28,7 @@ const onBlocked = function (details) {
 adguardApi.onRequestBlocked.addListener(onBlocked);
 
 // Add event listener for rules created by Adguard Assistant
-chrome.runtime.onMessage.addListener((message, sender) => {
-    console.log({ message, sender });
+chrome.runtime.onMessage.addListener((message) => {
     if (message.type === 'assistant-create-rule') {
         const { ruleText } = message.data;
         console.log(`Rule ${ruleText} was created by Adguard Assistant`);
