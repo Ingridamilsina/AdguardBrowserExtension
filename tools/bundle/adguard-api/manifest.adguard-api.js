@@ -25,7 +25,7 @@ export const adguardApiManifest = {
             ],
             'match_about_blank': true,
             'run_at': 'document_start',
-        }
+        },
     ],
     'minimum_chrome_version': '55.0',
     'permissions': [
